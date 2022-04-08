@@ -25,3 +25,45 @@ public class Client {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
     }
+     // Sending a message isn't blocking and can be done without spawning a thread, unlike waiting for a message.
+    public void sendMessage() {
+        try {
+            // Initially send the username of the client.
+            bufferedWriter.write(username);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+            // Create a scanner for user input.
+            Scanner scanner = new Scanner(System.in);
+            // While there is still a connection with the server, continue to scan the terminal and then send the message.
+            while (socket.isConnected()) {
+                String messageToSend = scanner.nextLine();
+                bufferedWriter.write(username + ": " + messageToSend);
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+            }
+        } catch (IOException e) {
+            // Gracefully close everything.
+            closeEverything(socket, bufferedReader, bufferedWriter);
+        }
+    }
+
+    // Listening for a message is blocking so need a separate thread for that.
+    public void listenForMessage() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String msgFromGroupChat;
+                // While there is still a connection with the server, continue to listen for messages on a separate thread.
+                while (socket.isConnected()) {
+                    try {
+                        // Get the messages sent from other users and print it to the console.
+                        msgFromGroupChat = bufferedReader.readLine();
+                        System.out.println(msgFromGroupChat);
+                    } catch (IOException e) {
+                        // Close everything gracefully.
+                        closeEverything(socket, bufferedReader, bufferedWriter);
+                    }
+                }
+            }
+        }).start();
+    }
