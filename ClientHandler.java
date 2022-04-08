@@ -84,3 +84,35 @@ public class ClientHandler implements Runnable {
             }
         }
     }
+   // If the client disconnects for any reason remove them from the list so a message isn't sent down a broken connection.
+    public void removeClientHandler() {
+        clientHandlers.remove(this);
+        broadcastMessage("SERVER: " + clientUsername + " has left the server!");
+    }
+
+    // Helper method to close everything so you don't have to repeat yourself.
+    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+        // Note you only need to close the outer wrapper as the underlying streams are closed when you close the wrapper.
+        // Note you want to close the outermost wrapper so that everything gets flushed.
+        // Note that closing a socket will also close the socket's InputStream and OutputStream.
+        // Closing the input stream closes the socket. You need to use shutdownInput() on socket to just close the input stream.
+        // Closing the socket will also close the socket's input stream and output stream.
+        // Close the socket after closing the streams.
+
+        // The client disconnected or an error occurred so remove them from the list so no message is broadcasted.
+        removeClientHandler();
+        try {
+            if (bufferedReader != null) {
+                bufferedReader.close();
+            }
+            if (bufferedWriter != null) {
+                bufferedWriter.close();
+            }
+            if (socket != null) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
