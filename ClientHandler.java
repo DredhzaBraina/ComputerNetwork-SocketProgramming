@@ -47,3 +47,22 @@ public class ClientHandler implements Runnable {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
     }
+    // Everything in this method is run on a separate thread. We want to listen for messages
+    // on a separate thread because listening (bufferedReader.readLine()) is a blocking operation.
+    // A blocking operation means the caller waits for the callee to finish its operation.
+    @Override
+    public void run() {
+        String messageFromClient;
+        // Continue to listen for messages while a connection with the client is still established.
+        while (socket.isConnected()) {
+            try {
+                // Read what the client sent and then send it to every other client.
+                messageFromClient = bufferedReader.readLine();
+                broadcastMessage(messageFromClient);
+            } catch (IOException e) {
+                // Close everything gracefully.
+                closeEverything(socket, bufferedReader, bufferedWriter);
+                break;
+            }
+        }
+    }
