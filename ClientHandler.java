@@ -66,3 +66,21 @@ public class ClientHandler implements Runnable {
             }
         }
     }
+    // Send a message through each client handler thread so that everyone gets the message.
+    // Basically each client handler is a connection to a client. So for any message that
+    // is received, loop through each connection and send it down it.
+    public void broadcastMessage(String messageToSend) {
+        for (ClientHandler clientHandler : clientHandlers) {
+            try {
+                // You don't want to broadcast the message to the user who sent it.
+                if (!clientHandler.clientUsername.equals(clientUsername)) {
+                    clientHandler.bufferedWriter.write(messageToSend);
+                    clientHandler.bufferedWriter.newLine();
+                    clientHandler.bufferedWriter.flush();
+                }
+            } catch (IOException e) {
+                // Gracefully close everything.
+                closeEverything(socket, bufferedReader, bufferedWriter);
+            }
+        }
+    }
