@@ -41,3 +41,22 @@ public class Client2 {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
     }
+
+
+    // Run the program.
+    public static void main(String[] args) throws IOException {
+
+        // Get a username for the user and a socket connection.
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your name please: ");
+        String username = scanner.nextLine();
+        // Create a socket to connect to the server.
+        Socket socket = new Socket("localhost", 1234);
+
+        // Pass the socket and give the client a username.
+        Client2 client = new Client2(socket, username);
+        // Infinite loop to read and send messages.
+        client.listenForMessage();
+        client.sendMessage();
+    }
+}
