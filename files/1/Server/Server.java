@@ -12,46 +12,30 @@ import java.util.ArrayList;
 
 public class Server {
 
-    // Array list to hold information about the files received.
     static ArrayList<MyFile> myFiles = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
 
-        // Used to track the file (jpanel that has the file name in it on a label).
         int fileId = 0;
 
-        // Main container, set the name.
         JFrame jFrame = new JFrame("WittCode's Server");
-        // Set the size of the frame.
         jFrame.setSize(400, 400);
-        // Give the frame a box layout that stacks its children on top of each other.
         jFrame.setLayout(new BoxLayout(jFrame.getContentPane(), BoxLayout.Y_AXIS));
-        // When closing the frame also close the program.
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Panel that will hold the title label and the other jpanels.
         JPanel jPanel = new JPanel();
-        // Make the panel that contains everything to stack its child elements on top of eachother.
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
 
-        // Make it scrollable when the data gets in jpanel.
         JScrollPane jScrollPane = new JScrollPane(jPanel);
-        // Make it so there is always a vertical scrollbar.
         jScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        // Title above panel.
         JLabel jlTitle = new JLabel("WittCode's File Receiver");
-        // Change the font of the title.
         jlTitle.setFont(new Font("Arial", Font.BOLD, 25));
-        // Add a border around the title for spacing.
         jlTitle.setBorder(new EmptyBorder(20,0,10,0));
-        // Center the title horizontally in the middle of the frame.
         jlTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Add everything to the main GUI.
         jFrame.add(jlTitle);
         jFrame.add(jScrollPane);
-        // Make the GUI show up.
         jFrame.setVisible(true);
 
         // Create a server socket that the server will be listening with.
