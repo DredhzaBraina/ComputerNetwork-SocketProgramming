@@ -18,7 +18,7 @@ Anetaret e grupit 8:
 
 # Kerkesat e projektit
 
-- Server
+- **Server**
 - [x] Të vendosen variabla te cilat përmbajnë numrin e portit (numri i portit të jetë i
 çfarëdoshëm) dhe IP adresën.
 - [x] Të jetë në gjendje të dëgjojë (listen) të paktën të gjithë anëtaret e grupit.
@@ -28,7 +28,7 @@ ekzekutoje të paktën një kërkesë në server).
 - [x] Të jetë në gjendje të jap qasje të plotë të paktën njërit klient për qasje ne folderat/
 përmbajtjen në file-t në server. 
 
-- Client
+- **Client**
 - [x] Të krijohet socket lidhja me server.
 - [x] Njeri nga pajisjet (klientët) të ketë privilegjet write(), read(), execute().
 - [x] Klientët tjerë të kenë vetëm read() permission.
