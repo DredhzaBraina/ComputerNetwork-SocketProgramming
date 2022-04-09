@@ -1,10 +1,3 @@
-/**
- * id - the id of the object
- * name - the name of the file
- * data - the file data
- * fileExtension - the file extension
- *
- */
 
 public class MyFile {
 
