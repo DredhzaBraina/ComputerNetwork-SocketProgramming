@@ -42,6 +42,49 @@ public class Client2 {
         }
     }
 
+    // Listening for a message is blocking so need a separate thread for that.
+    public void listenForMessage() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String msgFromGroupChat;
+                // While there is still a connection with the server, continue to listen for messages on a separate thread.
+                while (socket.isConnected()) {
+                    try {
+                        // Get the messages sent from other users and print it to the console.
+                        msgFromGroupChat = bufferedReader.readLine();
+                        System.out.println(msgFromGroupChat);
+                    } catch (IOException e) {
+                        // Close everything gracefully.
+                        closeEverything(socket, bufferedReader, bufferedWriter);
+                    }
+                }
+            }
+        }).start();
+    }
+
+    // Helper method to close everything so you don't have to repeat yourself.
+    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+        // Note you only need to close the outer wrapper as the underlying streams are closed when you close the wrapper.
+        // Note you want to close the outermost wrapper so that everything gets flushed.
+        // Note that closing a socket will also close the socket's InputStream and OutputStream.
+        // Closing the input stream closes the socket. You need to use shutdownInput() on socket to just close the input stream.
+        // Closing the socket will also close the socket's input stream and output stream.
+        // Close the socket after closing the streams.
+        try {
+            if (bufferedReader != null) {
+                bufferedReader.close();
+            }
+            if (bufferedWriter != null) {
+                bufferedWriter.close();
+            }
+            if (socket != null) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Run the program.
     public static void main(String[] args) throws IOException {
